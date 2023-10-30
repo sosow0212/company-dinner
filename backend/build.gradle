@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.5'
-    id 'io.spring.dependency-management' version '1.1.3'
+    id 'org.springframework.boot' version '2.7.13'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
@@ -26,6 +26,13 @@ ext {
     set('snippetsDir', file("build/generated-snippets"))
 }
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExt
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -47,6 +54,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     // jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
@@ -55,6 +64,26 @@ dependencies {
 
     // jasypt
     implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3"
+
+    // querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    annotationProcessor "javax.persistence:javax.persistence-api"
+    annotationProcessor "javax.annotation:javax.annotation-api"
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+}
+
+
+def generated = 'src/main/generated'
+sourceSets {
+    main.java.srcDirs += [generated]
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(generated)
+}
+
+clean.doLast {
+    file(generated).deleteDir()
 }
 
 tasks.named('test') {
@@ -65,4 +94,24 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+asciidoctor {
+    dependsOn test
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+}
+
+tasks.register('copyApiDocument', Copy) {
+    dependsOn asciidoctor
+    doFirst {
+        delete file("src/main/resources/static/docs")
+    }
+
+    from asciidoctor.outputDir
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyApiDocument
 }
