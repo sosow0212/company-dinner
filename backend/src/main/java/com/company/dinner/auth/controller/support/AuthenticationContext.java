@@ -1,5 +1,6 @@
 package com.company.dinner.auth.controller.support;
 
+import com.company.dinner.auth.exception.exceptions.LoginInvalidException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -19,8 +20,9 @@ public class AuthenticationContext {
 
     public Long getPrincipal() {
         if (Objects.isNull(this.memberId)) {
-            throw new IllegalArgumentException("로그인한 정보가 없습니다");
+            throw new LoginInvalidException();
         }
+
         return memberId;
     }
 

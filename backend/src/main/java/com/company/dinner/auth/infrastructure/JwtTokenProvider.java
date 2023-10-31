@@ -1,6 +1,11 @@
 package com.company.dinner.auth.infrastructure;
 
 import com.company.dinner.auth.domain.TokenProvider;
+import com.company.dinner.auth.exception.exceptions.ExpiredTokenException;
+import com.company.dinner.auth.exception.exceptions.SignatureInvalidException;
+import com.company.dinner.auth.exception.exceptions.TokenFormInvalidException;
+import com.company.dinner.auth.exception.exceptions.TokenInvalidException;
+import com.company.dinner.auth.exception.exceptions.UnsupportedTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -77,15 +82,15 @@ public class JwtTokenProvider implements TokenProvider {
                     .getBody()
                     .get("id", Long.class);
         } catch (SecurityException e) {
-            throw new IllegalArgumentException("서명을 확인하지 못했습니다");
+            throw new SignatureInvalidException();
         } catch (MalformedJwtException e) {
-            throw new IllegalArgumentException("토큰의 길이 및 형식이 올바르지 않습니다");
+            throw new TokenFormInvalidException();
         } catch (ExpiredJwtException e) {
-            throw new IllegalArgumentException("이미 만료된 토큰입니다");
+            throw new ExpiredTokenException();
         } catch (UnsupportedJwtException e) {
-            throw new IllegalArgumentException("지원되지 않는 토큰입니다");
+            throw new UnsupportedTokenException();
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("토큰이 유효하지 않습니다");
+            throw new TokenInvalidException();
         }
     }
 }
