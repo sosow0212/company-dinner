@@ -19,7 +19,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     private final AuthenticationContext authenticationContext;
 
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
+    public boolean preHandle(final HttpServletRequest request,
+                             final HttpServletResponse response,
+                             final Object handler) throws Exception {
         String token = AuthenticationExtractor.extract(request)
                 .orElseThrow(LoginInvalidException::new);
 

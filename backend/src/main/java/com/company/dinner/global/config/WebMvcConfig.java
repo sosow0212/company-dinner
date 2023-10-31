@@ -1,5 +1,6 @@
-package com.company.dinner.global.config.filter;
+package com.company.dinner.global.config;
 
+import com.company.dinner.global.config.filter.CorsFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

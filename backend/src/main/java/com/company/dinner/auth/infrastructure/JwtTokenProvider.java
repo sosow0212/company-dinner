@@ -49,7 +49,7 @@ public class JwtTokenProvider implements TokenProvider {
         return createToken(claims);
     }
 
-    private String createToken(Claims claims) {
+    private String createToken(final Claims claims) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(issuedAt())

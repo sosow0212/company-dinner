@@ -13,7 +13,8 @@ public enum HttpMethod {
     CONNECT,
     ANY;
 
-    public boolean matches(String pathMethod) {
-        return this == ANY || this.name().equalsIgnoreCase(pathMethod);
+    public boolean matches(final String pathMethod) {
+        return this == ANY ||
+                this.name().equalsIgnoreCase(pathMethod);
     }
 }

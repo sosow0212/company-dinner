@@ -18,7 +18,7 @@ public class PathContainer {
         this.excludePatterns = new ArrayList<>();
     }
 
-    public boolean isNotIncludedPath(String targetPath, String pathMethod) {
+    public boolean isNotIncludedPath(final String targetPath, final String pathMethod) {
         boolean isExcludePattern = excludePatterns.stream()
                 .anyMatch(pathPattern -> pathPattern.matches(pathMatcher, targetPath, pathMethod));
 
@@ -28,13 +28,13 @@ public class PathContainer {
         return isExcludePattern || isNotIncludePattern;
     }
 
-    public void addIncludePatterns(String path, HttpMethod... method) {
+    public void addIncludePatterns(final String path, final HttpMethod... method) {
         for (HttpMethod httpMethod : method) {
             includePatterns.add(new PathRequest(path, httpMethod));
         }
     }
 
-    public void addExcludePatterns(String path, HttpMethod... method) {
+    public void addExcludePatterns(final String path, final HttpMethod... method) {
         for (HttpMethod httpMethod : method) {
             excludePatterns.add(new PathRequest(path, httpMethod));
         }
