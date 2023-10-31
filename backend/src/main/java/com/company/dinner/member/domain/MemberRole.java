@@ -1,5 +1,6 @@
 package com.company.dinner.member.domain;
 
+import com.company.dinner.member.exception.exceptions.RoleNotFoundException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -18,8 +19,8 @@ public enum MemberRole {
 
     public static MemberRole from(final String role) {
         return Arrays.stream(values())
-                .filter(it -> it.role.equalsIgnoreCase(role))
+                .filter(value -> value.role.equalsIgnoreCase(role))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("권한을 찾을 수 없습니다."));
+                .orElseThrow(RoleNotFoundException::new);
     }
 }
