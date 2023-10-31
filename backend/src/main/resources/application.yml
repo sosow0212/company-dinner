@@ -9,3 +9,8 @@ jasypt:
   encryptor:
     bean: jasyptEncryptor
     password: ${ENCRYPT_KEY}
+
+jwt:
+  secret: ENC(LHiNzf4uM/gEef9wuL0nbEApF+3rxgoWEdNTy6PUclfEziDSKx1ep20u33eXO6dth1k98xpZhFyCKOnB6yqIy83aJ04PnOKJdJLXug06vCwDd4MH5i3d/xIzbqFN3mzcy0/FfJktNh6R/g98wHM9FFknpD5ObxaK)
+  expiration-period: ENC(xGs157YQmV9M49yKAVYOTQ==)
+
