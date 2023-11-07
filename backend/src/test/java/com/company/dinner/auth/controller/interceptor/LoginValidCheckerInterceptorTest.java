@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class LoginInterceptorTest {
+class LoginValidCheckerInterceptorTest {
 
     private final HttpServletRequest req = mock(HttpServletRequest.class);
     private final HttpServletResponse res = mock(HttpServletResponse.class);
@@ -24,7 +24,7 @@ class LoginInterceptorTest {
     @Test
     void token이_없다면_예외를_발생한다() throws Exception {
         // given
-        LoginInterceptor loginInterceptor = new LoginInterceptor(
+        LoginValidCheckerInterceptor loginValidCheckerInterceptor = new LoginValidCheckerInterceptor(
                 new JwtTokenProvider(),
                 new AuthenticationContext()
         );
@@ -32,7 +32,7 @@ class LoginInterceptorTest {
         when(req.getHeader("any")).thenReturn(null);
 
         // when
-        assertThatThrownBy(() -> loginInterceptor.preHandle(req, res, new Object()))
+        assertThatThrownBy(() -> loginValidCheckerInterceptor.preHandle(req, res, new Object()))
                 .isInstanceOf(LoginInvalidException.class);
     }
 }

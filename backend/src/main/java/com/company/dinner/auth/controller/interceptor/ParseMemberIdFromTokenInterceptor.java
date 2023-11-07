@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Component
-public class LoginCheckerInterceptor implements HandlerInterceptor {
+public class ParseMemberIdFromTokenInterceptor implements HandlerInterceptor {
 
-    private final LoginInterceptor loginInterceptor;
+    private final LoginValidCheckerInterceptor loginValidCheckerInterceptor;
     private final AuthenticationContext authenticationContext;
 
     @Override
@@ -25,6 +25,6 @@ public class LoginCheckerInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        return loginInterceptor.preHandle(request, response, handler);
+        return loginValidCheckerInterceptor.preHandle(request, response, handler);
     }
 }

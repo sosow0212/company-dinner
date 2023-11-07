@@ -2,6 +2,7 @@ package com.company.dinner.auth.controller.support.resolver;
 
 import com.company.dinner.auth.controller.support.AuthMember;
 import com.company.dinner.auth.controller.support.AuthenticationContext;
+import com.company.dinner.auth.exception.exceptions.LoginInvalidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 @Component
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final int ANONYMOUS = -1;
 
     private final AuthenticationContext authenticationContext;
 
@@ -27,6 +30,12 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
                                   final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest,
                                   final WebDataBinderFactory binderFactory) throws Exception {
-        return authenticationContext.getPrincipal();
+        Long memberId = authenticationContext.getPrincipal();
+
+        if (memberId == ANONYMOUS) {
+            throw new LoginInvalidException();
+        }
+
+        return memberId;
     }
 }

@@ -1,7 +1,7 @@
 package com.company.dinner.auth.config;
 
-import com.company.dinner.auth.controller.interceptor.LoginCheckerInterceptor;
-import com.company.dinner.auth.controller.interceptor.LoginInterceptor;
+import com.company.dinner.auth.controller.interceptor.LoginValidCheckerInterceptor;
+import com.company.dinner.auth.controller.interceptor.ParseMemberIdFromTokenInterceptor;
 import com.company.dinner.auth.controller.interceptor.PathMatcherInterceptor;
 import com.company.dinner.auth.controller.support.resolver.AuthArgumentResolver;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 import static com.company.dinner.auth.controller.interceptor.HttpMethod.ANY;
-import static com.company.dinner.auth.controller.interceptor.HttpMethod.GET;
 import static com.company.dinner.auth.controller.interceptor.HttpMethod.OPTIONS;
 
 @RequiredArgsConstructor
@@ -22,24 +21,24 @@ import static com.company.dinner.auth.controller.interceptor.HttpMethod.OPTIONS;
 public class AuthConfig implements WebMvcConfigurer {
 
     private final AuthArgumentResolver authArgumentResolver;
-    private final LoginCheckerInterceptor loginCheckerInterceptor;
-    private final LoginInterceptor loginInterceptor;
+    private final ParseMemberIdFromTokenInterceptor parseMemberIdFromTokenInterceptor;
+    private final LoginValidCheckerInterceptor loginValidCheckerInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginCheckerInterceptor());
-        registry.addInterceptor(loginInterceptor());
+        registry.addInterceptor(parseMemberIdFromTokenInterceptor());
+        registry.addInterceptor(loginValidCheckerInterceptor());
     }
 
-    private HandlerInterceptor loginCheckerInterceptor() {
-        return new PathMatcherInterceptor(loginCheckerInterceptor)
-                .excludePathPattern("/**", OPTIONS)
-                .addPathPatterns("/tests/**", GET);
+    private HandlerInterceptor parseMemberIdFromTokenInterceptor() {
+        return new PathMatcherInterceptor(parseMemberIdFromTokenInterceptor)
+                .excludePathPattern("/**", OPTIONS);
     }
 
-    private HandlerInterceptor loginInterceptor() {
-        return new PathMatcherInterceptor(loginInterceptor)
-                .excludePathPattern("/**", ANY, OPTIONS);
+    private HandlerInterceptor loginValidCheckerInterceptor() {
+        return new PathMatcherInterceptor(loginValidCheckerInterceptor)
+                .addPathPatterns("/need-permit-to-login-here", ANY)
+                .excludePathPattern("/**", OPTIONS);
     }
 
     @Override

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class LoginValidCheckerInterceptor implements HandlerInterceptor {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationContext authenticationContext;
