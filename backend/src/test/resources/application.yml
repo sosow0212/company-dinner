@@ -17,3 +17,7 @@ spring:
 jasypt:
   encryptor:
     password: password
+
+jwt:
+  secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+  expiration-period: 3600
